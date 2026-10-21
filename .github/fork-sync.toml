@@ -1,0 +1,19 @@
+# fork-sync declaration (docs/operations/onboarding-a-fork.md in AlobarQuest/orchestrator).
+# Upstream is an npm workspace monorepo that tags each package by its scoped name, and whose root
+# package.json is a private, fixed 0.1.0, so the sync follows the CLI package's releases.
+# n8n-as-code's CLI depends on @n8n-as-code/n8n-manager-core from this repository, and its Claude
+# plugin runs this CLI (`npx @n8n-as-code/n8n-manager`).
+upstream = "EtienneLescot/n8n-manager"
+ecosystem = "npm"
+release_tag_pattern = '^@n8n-as-code/n8n-manager-v(\d+\.\d+\.\d+)$'
+version_manifest = "packages/cli/package.json"
+# The ecosystem defaults (`npm run build`, `npm test`) build and pass with the network off,
+# measured at v0.7.1 in a container: 49 tests pass, 1 skipped.
+
+[review]
+# The credentials manager handles n8n credentials; the core talks to n8n instances.
+trust_critical = [
+  "packages/credentials-manager/*",
+  "packages/core/src/*",
+  "packages/cli/src/*",
+]
